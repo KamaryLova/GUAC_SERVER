@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  cloudflared:
+    image: erisamoe/cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    depends_on:
+      - guacamole
+
+  guacamole:
+    image: abesnier/guacamole
+    container_name: guacamole
+    volumes:
+      - postgres:/config
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres:
+    driver: local
